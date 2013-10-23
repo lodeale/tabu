@@ -7,6 +7,9 @@ class Panel extends CI_Controller {
 		$this->load->model("panel_model");
 	}
 
+	/*
+	* Comprueba el login
+	*/
 	public function _isLogin(){
 		if(!$this->session->userdata("loginTrue")):
 			redirect("inicio");
