@@ -35,6 +35,9 @@
 					<li><a href="http://localhost/barcodegen/html/BCGcode39.php">Generar Codigo</a></li>
 				</ul>
 				<ul>
+					<li><a href="<?php echo base_url(); ?>panel/facturacion">Facturar</a></li>
+				</ul>
+				<ul>
 					<li><a href="<?php echo base_url(); ?>panel/">Atras</a></li>
 				</ul>
 				<div id="buscar">

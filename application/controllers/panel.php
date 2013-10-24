@@ -159,4 +159,41 @@ class Panel extends CI_Controller {
 	}
 	/////////////// MODULO DE EJEMPLO (SUBIR IMAGENES) ///////////////
 
+	/////////////// MODULO DE FACTURACION ///////////////
+
+	public function facturacion(){
+		$data["productos"] = $this->panel_model->getProductos();
+		$this->load->view("facturacion/facturacion.php",$data);
+	}
+
+	public function registrarProducto(){
+		$cg = $this->input->post("prod");
+		$productos = $this->panel_model->getProductos($cg);	
+		$query = $this->panel_model->insertProdFactTemp($productos);
+		if($query):
+			$data["productos"] = $this->panel_model->getProductosFactTemp();	
+		else:
+			echo "error function registrarProductos";
+		endif;
+		$this->load->view("facturacion/ajax",$data);
+	}
+
+	public function facturarProducto(){
+		$productos = $this->panel_model->getProductosFactTemp();
+		foreach($productos as $row):
+			$stock = $this->panel_model->getStockProd($row->codgen);
+			$this->panel_model->updateProdFactTemp($row->codgen,$stock);
+		endforeach;
+		
+		$query = $this->panel_model->truncateFactTemp();
+
+		echo "La actualización de STOCK fue exitoso!";
+	}
+
+	public function clearFactTemp(){
+		$query = $this->panel_model->truncateFactTemp();
+		$data["productos"] = $this->panel_model->getProductosFactTemp();
+		$this->load->view("facturacion/ajax",$data);
+	}
+
 }

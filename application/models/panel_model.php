@@ -168,4 +168,75 @@ class Panel_model extends CI_Model {
 
 	}
 
+
+	/////////////// FIN - MODULO DE FACTURACION ///////////////
+
+	public function getProductos($cg=null){
+
+		if($cg != null):
+			$this->db->where("codgen",$cg);
+		endif;
+		$query =$this->db->get("productos");
+		if($query->num_rows > 0):
+			return $query->result();
+		else:
+			return false;
+		endif;
+	}
+
+	public function insertProdFactTemp($post=null){
+		$this->db->set("modelo",$post[0]->modelo);
+		$this->db->set("talle",$post[0]->talle);
+		$this->db->set("tipo",$post[0]->tipo);
+		$this->db->set("color",$post[0]->color);
+		$this->db->set("precio",$post[0]->precio);
+		$this->db->set("codgen",$post[0]->codgen);
+		$this->db->set("stock",$post[0]->stock);
+		
+		$query = $this->db->insert("fact_temp");
+		if($query):
+			return True;
+		else:
+			return False;
+		endif;
+	}
+
+	public function getProductosFactTemp(){
+		$query =$this->db->get("fact_temp");
+		if($query->num_rows > 0):
+			return $query->result();
+		else:
+			return array();
+		endif;
+	}
+
+	public function updateProdFactTemp($cg, $st){
+		$st = $st - 1;
+		$this->db->set("stock",$st);
+		$this->db->where("codgen",$cg);
+
+		$query = $this->db->update("productos");
+		if($query):
+			return true;
+		else:
+			return false;
+		endif;
+	}
+
+	public function getStockProd($cg=null){
+		$this->db->select("stock");
+		$this->db->where("codgen",$cg);
+		$query =$this->db->get("productos");
+		if($query->num_rows > 0):
+			$prod = $query->result();
+			return $prod[0]->stock;
+		else:
+			return false;
+		endif;
+	}
+
+	public function truncateFactTemp(){
+		$this->db->truncate("fact_temp");
+	}
+
 }
